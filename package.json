@@ -1,0 +1,7 @@
+{
+  "name": "nft-contract",
+  "version": "1.0.0",
+  "devDependencies": {
+    "truffle": "^5.1.8"
+  }
+}
