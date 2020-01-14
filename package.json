@@ -2,6 +2,7 @@
   "name": "nft-contract",
   "version": "1.0.0",
   "devDependencies": {
+    "solc": "^0.5.12",
     "truffle": "^5.1.8"
   },
   "dependencies": {
