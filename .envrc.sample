@@ -1,0 +1,5 @@
+# Private key
+export PRIVATE_KEY='0x...'
+
+# Rpc endpoint url
+export ENDPOINT_URL='https://xxxxx'
