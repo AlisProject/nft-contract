@@ -1,6 +1,9 @@
 {
   "name": "nft-contract",
   "version": "1.0.0",
+  "scripts": {
+    "test": "npx truffle test"
+  },
   "devDependencies": {
     "bignumber.js": "^9.0.0",
     "chai": "^4.2.0",

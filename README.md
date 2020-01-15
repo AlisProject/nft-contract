@@ -19,7 +19,7 @@ $ npm install
 
 ## Test
 ```bash
-$ npx truffle test
+$ npm run test
 ```
 
 ## Deploy
