@@ -31,43 +31,41 @@ contract('Badge', (accounts) => {
     });
   });
 
-  describe('mint', () => {
-    it('should mint token', async () => {
-      await badge.mint(accounts[1], 1, "https://example.com/1.json");
-      await badge.mint(accounts[1], 1, "https://example.com/1.json");
+  describe('bulkMint', () => {
+    it('should bulk mint tokens', async () => {
+      await badge.bulkMint([accounts[1], accounts[2]], 1, "https://example.com/1.json");
       const token1 = await badge.tokenOfOwnerByIndex(accounts[1], 0)
-      const token2 = await badge.tokenOfOwnerByIndex(accounts[1], 1)
+      const token2 = await badge.tokenOfOwnerByIndex(accounts[2], 0)
       token1.toNumber().should.equal(100000001)
       token2.toNumber().should.equal(100000002)
 
-      await badge.mint(accounts[2], 2, "https://example.com/2.json");
-      await badge.mint(accounts[2], 2, "https://example.com/2.json");
-      const token3 = await badge.tokenOfOwnerByIndex(accounts[2], 0)
+      await badge.bulkMint([accounts[1], accounts[2]], 2, "https://example.com/2.json");
+      const token3 = await badge.tokenOfOwnerByIndex(accounts[1], 1)
       const token4 = await badge.tokenOfOwnerByIndex(accounts[2], 1)
       token3.toNumber().should.equal(200000001)
       token4.toNumber().should.equal(200000002)
     });
 
     it('should set tokenURI', async () => {
-      await badge.mint(accounts[1], 1, "https://example.com/1.json");
+      await badge.bulkMint([accounts[1]], 1, "https://example.com/1.json");
       const tokenURI = await badge.tokenURI(100000001);
       tokenURI.should.equal("https://example.com/1.json");
     });
 
     it('should increase supply of the badge type', async () => {
-      await badge.mint(accounts[1], 1, "https://example.com/1.json");
-      await badge.mint(accounts[2], 1, "https://example.com/1.json");
-      await badge.mint(accounts[3], 2, "https://example.com/2.json");
+      await badge.bulkMint([accounts[1], accounts[2]], 1, "https://example.com/1.json");
+      await badge.bulkMint([accounts[3]], 1, "https://example.com/1.json");
+      await badge.bulkMint([accounts[3]], 2, "https://example.com/2.json");
 
-      const badgeType1Supply = await badge.badgeTypeSupply(1)
-      const badgeType2Supply = await badge.badgeTypeSupply(2)
+      const badgeTypeSupply1 = await badge.badgeTypeSupply(1)
+      const badgeTypeSupply2 = await badge.badgeTypeSupply(2)
 
-      badgeType1Supply.toNumber().should.equal(2)
-      badgeType2Supply.toNumber().should.equal(1)
+      badgeTypeSupply1.toNumber().should.equal(3)
+      badgeTypeSupply2.toNumber().should.equal(1)
     });
 
     it('should fail if sender is not minter', async () => {
-      await badge.mint(accounts[1], 1, "https://example.com/1.json", {
+      await badge.bulkMint([accounts[1]], 1, "https://example.com/1.json", {
         from: accounts[1]
       }).should.be.rejectedWith(Error,
         makeRejectMessageWithReason('MinterRole: caller does not have the Minter role'));
@@ -96,18 +94,18 @@ contract('Badge', (accounts) => {
   describe('tokenURI', () => {
     it('should return token uri', async () => {
       // baseURL is empty
-      await badge.mint(accounts[1], 1, "https://example.com/1.json");
+      await badge.bulkMint([accounts[1]], 1, "https://example.com/1.json");
       const tokenURI1 = await badge.tokenURI(100000001);
       tokenURI1.should.equal("https://example.com/1.json")
 
       // baseURL is not empty
       await badge.setBaseURI("https://example.com/");
-      await badge.mint(accounts[1], 2, "2.json");
+      await badge.bulkMint([accounts[1]], 2, "2.json");
       const tokenURI2 = await badge.tokenURI(200000001);
       tokenURI2.should.equal("https://example.com/2.json")
 
       // tokenURI is empty
-      await badge.mint(accounts[1], 3, "");
+      await badge.bulkMint([accounts[1]], 3, "");
       const tokenURI3 = await badge.tokenURI(300000001);
       tokenURI3.should.equal("");
     });
@@ -120,14 +118,14 @@ contract('Badge', (accounts) => {
 
   describe('setTokenURI', () => {
     it('should set token uri', async () => {
-      await badge.mint(accounts[1], 1, "");
+      await badge.bulkMint([accounts[1]], 1, "");
       await badge.setTokenURI(100000001, "https://example.com/1.json")
       const tokenURI = await badge.tokenURI(100000001);
       tokenURI.should.equal("https://example.com/1.json");
     });
 
     it('should fail if sender is not minter', async () => {
-      await badge.mint(accounts[1], 1, "");
+      await badge.bulkMint([accounts[1]], 1, "");
       await badge.setTokenURI(100000001, "https://example.com/1.json", {
         from: accounts[1]
       }).should.be.rejectedWith(Error,

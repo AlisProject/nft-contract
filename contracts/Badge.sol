@@ -21,11 +21,13 @@ contract Badge is ERC721Full, MinterRole {
     }
 
     //////// Function ////////
-    function mint(address to, uint256 typeId, string memory _tokenURI) public onlyMinter returns (bool) {
-        badgeTypeSupply[typeId]++;
-        uint256 tokenId = typeId.mul(TYPE_ID_OFFSET).add(badgeTypeSupply[typeId]);
-        _mint(to, tokenId);
-        tokenURIs[tokenId] = _tokenURI;
+    function bulkMint(address[] memory toAddresses, uint256 typeId, string memory _tokenURI) public onlyMinter returns (bool) {
+        for (uint256 i = 0; i < toAddresses.length; i++) {
+            badgeTypeSupply[typeId]++;
+            uint256 tokenId = typeId.mul(TYPE_ID_OFFSET).add(badgeTypeSupply[typeId]);
+            _mint(toAddresses[i], tokenId);
+            tokenURIs[tokenId] = _tokenURI;
+        }
 
         return true;
     }
