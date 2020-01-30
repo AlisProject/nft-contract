@@ -1,0 +1,12 @@
+# Env
+.envrc*
+!.envrc.sample
+
+# Generated files
+build
+
+# Node modules
+node_modules
+
+# Editor
+.vscode
