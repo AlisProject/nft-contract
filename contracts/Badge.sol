@@ -21,7 +21,7 @@ contract Badge is ERC721Full, MinterRole {
     }
 
     //////// Function ////////
-    function bulkMint(address[] memory toAddresses, uint256 typeId, string memory _tokenURI) public onlyMinter returns (bool) {
+    function bulkMint(address[] calldata toAddresses, uint256 typeId, string calldata _tokenURI) external onlyMinter returns (bool) {
         for (uint256 i = 0; i < toAddresses.length; i++) {
             badgeTypeSupply[typeId]++;
             uint256 tokenId = typeId.mul(TYPE_ID_OFFSET).add(badgeTypeSupply[typeId]);
@@ -52,3 +52,4 @@ contract Badge is ERC721Full, MinterRole {
         tokenURIs[tokenId] = uri;
     }
 }
+
