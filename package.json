@@ -11,7 +11,7 @@
     "chai-bignumber": "^3.0.0",
     "solc": "0.5.12",
     "truffle": "5.1.8",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "@truffle/hdwallet-provider": "^1.0.44"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^2.4.0"
